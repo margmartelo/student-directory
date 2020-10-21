@@ -37,14 +37,15 @@ students = [
 #   puts "The students of Villians Academy"
 #   puts "-------------"
 # end
-# Now let's print the students whose name begins with a specific letter (passed as argument)
-def print(students, letter)
+# Now let's print the students whose name is shorter than 12 characters.
+def print(students)
   students.each_with_index do |(student), index|
-    if student[:name][0] == letter
+    if student[:name].length < 12
       puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
     end
   end
 end
+
 
 # def print_footer(names)
 #   # Printing the total number of students
@@ -54,5 +55,5 @@ end
 # students = input_students
 # #Until we call the methods, nothing will happen
 # print_header
-print(students, "T")
+print(students)
 # print_footer(students)
