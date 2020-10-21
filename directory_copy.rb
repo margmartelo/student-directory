@@ -33,27 +33,28 @@ students = [
 #   students
 # end
 #
-# def print_header
-#   puts "The students of Villians Academy"
-#   puts "-------------"
-# end
-# Now let's print the students whose name is shorter than 12 characters.
+def print_header
+  puts "The students of Villians Academy"
+  puts "-------------"
+end
+
+# Now let's print all students using a while loop
 def print(students)
-  students.each_with_index do |(student), index|
-    if student[:name].length < 12
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-    end
+  sum = 0
+  while sum < students.length
+    puts "#{sum + 1}. #{students[sum][:name]} (#{students[sum][:cohort]} cohort)"
+    sum += 1
   end
 end
 
 
-# def print_footer(names)
-#   # Printing the total number of students
-#   puts "Overall, we have #{names.count} great students"
-# end
+def print_footer(names)
+  # Printing the total number of students
+  puts "Overall, we have #{names.count} great students"
+end
 
 # students = input_students
 # #Until we call the methods, nothing will happen
-# print_header
+print_header
 print(students)
-# print_footer(students)
+print_footer(students)
