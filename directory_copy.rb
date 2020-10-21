@@ -33,24 +33,26 @@ students = [
 #   students
 # end
 #
-def print_header
-  puts "The students of Villians Academy"
-  puts "-------------"
-end
-# Now let's print them
-def print(students)
+# def print_header
+#   puts "The students of Villians Academy"
+#   puts "-------------"
+# end
+# Now let's print the students whose name begins with a specific letter (passed as argument)
+def print(students, letter)
   students.each_with_index do |(student), index|
+    if student[:name][0] == letter
       puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    end
   end
 end
 
-def print_footer(names)
-  # Printing the total number of students
-  puts "Overall, we have #{names.count} great students"
-end
+# def print_footer(names)
+#   # Printing the total number of students
+#   puts "Overall, we have #{names.count} great students"
+# end
 
 # students = input_students
 # #Until we call the methods, nothing will happen
-print_header
-print(students)
-print_footer(students)
+# print_header
+print(students, "T")
+# print_footer(students)
