@@ -50,7 +50,6 @@ def input_students
       break
     end
   end
-
   students
 end
 
@@ -61,8 +60,31 @@ def print_header
 end
 # Now let's print them
 def print(students)
+  cohort_groups = {
+    january: [],
+    february: [],
+    march: [],
+    april: [],
+    may: [],
+    june: [],
+    july: [],
+    august: [],
+    september: [],
+    october: [],
+    november: [],
+    december: []
+  }
   students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)".center(44)
+    cohort_groups[student[:cohort]].push(student[:name])
+  end
+
+  cohort_groups.each do |cohort, name|
+    if name.length > 0
+      puts "The list students for #{cohort} is:"
+      puts name
+    else
+      puts "There are no students in #{cohort}."
+    end
   end
 end
 
