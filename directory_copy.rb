@@ -35,7 +35,12 @@ def input_students
   while !name.empty? do
     #add the student hash to the array
     students << {name: name, cohort: cohort}
-    puts "Now we have #{students.count} students"
+    number_of_students = students.count
+    if number_of_students > 1
+      puts "Now we have #{number_of_students} students"
+    else
+      puts "Now we have #{number_of_students} student"
+    end
 
     name = value_or_default(gets.chomp, "Incognito")
     cohort = value_or_default(gets.chomp, "Unknown").to_sym
