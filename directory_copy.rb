@@ -13,25 +13,47 @@
 #   {name: "Norman Bates", cohort: :november}
 # ]
 
+
+def value_or_default(value, default)
+  if value == ""
+    value = default
+  end
+  return value
+end
+
 def input_students
-  puts "Please enter the names of the students"
+  possible_cohorts = [:january, :february, :march, :april, :may, :june, :july,
+    :august, :september, :october, :november, :december]
+
+  puts "Please enter the names and cohorts of the students"
   puts "To finish, just hit return twice"
 
   students = []
-  name = gets.chomp
-  # while the name is not empty (if it isn't empty, 'name.empty?' will evaluate
-  # false, so '!name.empty' will evaluate true and continue the loop), repeat
-  # this code
+  name = value_or_default(gets.chomp, "Incognito")
+  # Setting the variable 'cohort' as the result of the user input
+  cohort = value_or_default(gets.chomp, "Unknown").to_sym
   while !name.empty? do
     #add the student hash to the array
-    students << {name: name, cohort: :november}
+    students << {name: name, cohort: cohort}
     puts "Now we have #{students.count} students"
-    # get another name from the user
-    name = gets.chomp
+
+    name = value_or_default(gets.chomp, "Incognito")
+    cohort = value_or_default(gets.chomp, "Unknown").to_sym
+
+    possible_cohorts.push(:Unknown)
+    until possible_cohorts.include? cohort
+      puts "Please insert your cohort again"
+      cohort = value_or_default(gets.chomp, "Unknown").to_sym
+    end
+
+    if name == "Incognito" && cohort == :Unknown
+      break
+    end
   end
 
   students
 end
+
 
 def print_header
   puts "The students of Villians Academy".center(44)
