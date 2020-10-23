@@ -54,6 +54,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit"
 end
 
@@ -71,6 +72,8 @@ def process(selection)
       show_students
     when "3"
       save_students
+    when "4"
+      load_students
     when "9"
       exit #this will cause the program to terminate
     else
@@ -97,8 +100,19 @@ def save_students
   file.close
 end
 
+def load_students
+  @students = [] # Setting the variable @student as an empty array to avoid double insertion
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+  name, cohort = line.chomp.split(',') #Parallel assignment
+    @students << {name: name, cohort: cohort.to_sym}
+  end
+  file.close
+
+  # puts @students # Checking if it works properly
+end
 # students = input_students
-#Until we call the methods, nothing will happen
+# Until we call the methods, nothing will happen
 # print_header
 # print(students)
 # print_footer(students)
