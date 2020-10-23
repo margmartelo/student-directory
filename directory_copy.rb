@@ -29,9 +29,9 @@ def input_students
   puts "To finish, just hit return twice"
 
   students = []
-  name = value_or_default(gets.chomp, "Incognito")
+  name = value_or_default(gets.strip, "Incognito")
   # Setting the variable 'cohort' as the result of the user input
-  cohort = value_or_default(gets.chomp, "Unknown").to_sym
+  cohort = value_or_default(gets.strip, "Unknown").to_sym
   while !name.empty? do
     #add the student hash to the array
     students << {name: name, cohort: cohort}
@@ -42,13 +42,13 @@ def input_students
       puts "Now we have #{number_of_students} student"
     end
 
-    name = value_or_default(gets.chomp, "Incognito")
-    cohort = value_or_default(gets.chomp, "Unknown").to_sym
+    name = value_or_default(gets.strip, "Incognito")
+    cohort = value_or_default(gets.strip, "Unknown").to_sym
 
     possible_cohorts.push(:Unknown)
     until possible_cohorts.include? cohort
       puts "Please insert your cohort again"
-      cohort = value_or_default(gets.chomp, "Unknown").to_sym
+      cohort = value_or_default(gets.strip, "Unknown").to_sym
     end
 
     if name == "Incognito" && cohort == :Unknown
@@ -85,7 +85,7 @@ def print(students)
 
   cohort_groups.each do |cohort, name|
     if name.length > 0
-      puts "The list students for #{cohort} is:"
+      puts "The list of students for #{cohort} is:"
       puts name
     else
       puts "There are no students in #{cohort}."
