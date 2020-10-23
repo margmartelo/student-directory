@@ -18,7 +18,7 @@ def input_students
   puts "To finish, just hit return twice"
 
   @students = []
-  name = gets.chomp
+  name = STDIN.gets.chomp
   # while the name is not empty (if it isn't empty, 'name.empty?' will evaluate
   # false, so '!name.empty' will evaluate true and continue the loop), repeat
   # this code
@@ -27,7 +27,7 @@ def input_students
     @students << {name: name, cohort: :november}
     puts "Now we have #{@students.count} students"
     # get another name from the user
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
 end
 
@@ -46,9 +46,6 @@ def print_footer
   # Printing the total number of students
   puts "Overall, we have #{@students.count} great students"
 end
-
-# def interactive_menu
-#   students = []
 
 def print_menu
   puts "1. Input the students"
@@ -84,7 +81,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -100,20 +97,32 @@ def save_students
   file.close
 end
 
-def load_students
+def load_students(filename = "students.csv")
   @students = [] # Setting the variable @student as an empty array to avoid double insertion
-  file = File.open("students.csv", "r")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
-  name, cohort = line.chomp.split(',') #Parallel assignment
+  name, cohort = line.chomp.split(',') # Parallel assignment
     @students << {name: name, cohort: cohort.to_sym}
   end
   file.close
-
   # puts @students # Checking if it works properly
+end
+
+def try_load_students
+  filename = ARGV.first # First argument from the command line
+  return if filename.nil? # If no file is given, it gets out of the method
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
 end
 # students = input_students
 # Until we call the methods, nothing will happen
 # print_header
 # print(students)
 # print_footer(students)
+try_load_students
 interactive_menu
