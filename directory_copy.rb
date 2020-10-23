@@ -82,7 +82,7 @@ def print(students)
   students.each do |student|
     cohort_groups[student[:cohort]].push(student[:name])
   end
-
+  # Printing the results only if the array contains at least one element
   cohort_groups.each do |cohort, name|
     if name.length > 0
       puts "The list of students for #{cohort} is:"
