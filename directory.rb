@@ -13,21 +13,41 @@
 #   {name: "Norman Bates", cohort: :november}
 # ]
 
-def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
-
+# def input_students
+#   puts "Please enter the names of the students"
+#   puts "To finish, just hit return twice"
+#
+#   @students = []
+#   name = STDIN.gets.chomp
+#   # while the name is not empty (if it isn't empty, 'name.empty?' will evaluate
+#   # false, so '!name.empty' will evaluate true and continue the loop), repeat
+#   # this code
+#   while !name.empty? do
+#     #add the student hash to the array
+#     @students << {name: name, cohort: :november}
+#     puts "Now we have #{@students.count} students"
+#     # get another name from the user
+#     name = STDIN.gets.chomp
+#   end
+# end
+def getting_students(filename = "students.csv")
   @students = []
-  name = STDIN.gets.chomp
-  # while the name is not empty (if it isn't empty, 'name.empty?' will evaluate
-  # false, so '!name.empty' will evaluate true and continue the loop), repeat
-  # this code
-  while !name.empty? do
-    #add the student hash to the array
-    @students << {name: name, cohort: :november}
-    puts "Now we have #{@students.count} students"
-    # get another name from the user
+  if File.exist?(filename)
+    file = File.open(filename, "r")
+    file.readlines.each do |line|
+    name, cohort = line.chomp.split(',') # Parallel assignment
+      @students << {name: name, cohort: cohort.to_sym}
+    end
+    file.close
+  else
     name = STDIN.gets.chomp
+    while !name.empty? do
+      #add the student hash to the array
+      @students << {name: name, cohort: :november}
+      puts "Now we have #{@students.count} students"
+      # get another name from the user
+      name = STDIN.gets.chomp
+    end
   end
 end
 
@@ -64,13 +84,13 @@ end
 def process(selection)
     case selection
     when "1"
-      input_students
+      getting_students
     when "2"
       show_students
     when "3"
       save_students
     when "4"
-      load_students
+      try_load_students
     when "9"
       exit #this will cause the program to terminate
     else
@@ -97,16 +117,16 @@ def save_students
   file.close
 end
 
-def load_students(filename = "students.csv")
-  @students = [] # Setting the variable @student as an empty array to avoid double insertion
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-  name, cohort = line.chomp.split(',') # Parallel assignment
-    @students << {name: name, cohort: cohort.to_sym}
-  end
-  file.close
+# def load_students(filename = "students.csv")
+#   @students = [] # Setting the variable @student as an empty array to avoid double insertion
+#   file = File.open(filename, "r")
+#   file.readlines.each do |line|
+#   name, cohort = line.chomp.split(',') # Parallel assignment
+#     @students << {name: name, cohort: cohort.to_sym}
+#   end
+#   file.close
   # puts @students # Checking if it works properly
-end
+# end
 
 def try_load_students
   filename = ARGV.first # First argument from the command line
@@ -124,5 +144,5 @@ end
 # print_header
 # print(students)
 # print_footer(students)
-try_load_students
+# try_load_students
 interactive_menu
