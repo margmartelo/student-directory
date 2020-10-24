@@ -1,37 +1,7 @@
-# Creating a hash with the students information: name and cohort
-# students = [
-#   {name: "Dr. Hannibal Lecter", cohort: :november},
-#   {name: "Darth Vader", cohort: :november},
-#   {name: "Nurse Ratched", cohort: :november},
-#   {name: "Michael Corleone", cohort: :november},
-#   {name: "Alex DeLarge", cohort: :november},
-#   {name: "The Wicked Witch of the West", cohort: :november},
-#   {name: "Terminator", cohort: :november},
-#   {name: "Freddy Krueger", cohort: :november},
-#   {name: "The Joker", cohort: :november},
-#   {name: "Joffrey Baratheon", cohort: :november},
-#   {name: "Norman Bates", cohort: :november}
-# ]
 
-# def input_students
-#   puts "Please enter the names of the students"
-#   puts "To finish, just hit return twice"
-#
-#   @students = []
-#   name = STDIN.gets.chomp
-#   # while the name is not empty (if it isn't empty, 'name.empty?' will evaluate
-#   # false, so '!name.empty' will evaluate true and continue the loop), repeat
-#   # this code
-#   while !name.empty? do
-#     #add the student hash to the array
-#     @students << {name: name, cohort: :november}
-#     puts "Now we have #{@students.count} students"
-#     # get another name from the user
-#     name = STDIN.gets.chomp
-#   end
-# end
-def getting_students(filename = "students.csv")
-  @students = []
+@students = []
+
+def getting_students(filename = "students.csv") # Here we pass 'students.csv' as a default value
   if File.exist?(filename)
     file = File.open(filename, "r")
     file.readlines.each do |line|
@@ -40,6 +10,8 @@ def getting_students(filename = "students.csv")
     end
     file.close
   else
+    puts "Please enter the names of the students"
+    puts "To finish, just hit return twice"
     name = STDIN.gets.chomp
     while !name.empty? do
       #add the student hash to the array
@@ -70,8 +42,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to a .csv file"
+  puts "4. Load the list from a .csv file"
   puts "9. Exit"
 end
 
@@ -81,16 +53,33 @@ def show_students
   print_footer
 end
 
+
 def process(selection)
     case selection
     when "1"
       getting_students
     when "2"
-      show_students
+      if @students.length != 0
+        show_students
+      else
+        puts "There are currently no students."
+      end
     when "3"
-      save_students
+      puts "In which file would you like to save the list of students?"
+      filename = gets.chomp
+      if File.exist?(filename)
+        save_students(filename)
+      else
+        puts "Sorry, that file doesn't exist."
+      end
     when "4"
-      try_load_students
+      puts "From which file would you like to load the list of students?"
+      filename = gets.chomp
+      if File.exist?(filename)
+        getting_students(filename)
+      else
+        puts "Sorry, that file doesn't exist."
+      end
     when "9"
       exit #this will cause the program to terminate
     else
@@ -105,9 +94,9 @@ def interactive_menu
   end
 end
 
-def save_students
+def save_students(filename)
   # open the file for writing
-  file = File.open("students.csv", "w")
+  file = File.open(filename, "w")
   # iterate over the array of save_students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
@@ -117,16 +106,6 @@ def save_students
   file.close
 end
 
-# def load_students(filename = "students.csv")
-#   @students = [] # Setting the variable @student as an empty array to avoid double insertion
-#   file = File.open(filename, "r")
-#   file.readlines.each do |line|
-#   name, cohort = line.chomp.split(',') # Parallel assignment
-#     @students << {name: name, cohort: cohort.to_sym}
-#   end
-#   file.close
-  # puts @students # Checking if it works properly
-# end
 
 def try_load_students
   filename = ARGV.first # First argument from the command line
@@ -139,10 +118,5 @@ def try_load_students
     exit # quit the program
   end
 end
-# students = input_students
-# Until we call the methods, nothing will happen
-# print_header
-# print(students)
-# print_footer(students)
-# try_load_students
+
 interactive_menu
