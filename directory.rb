@@ -3,12 +3,12 @@
 
 def getting_students(filename = "students.csv") # Here we pass 'students.csv' as a default value
   if File.exist?(filename)
-    file = File.open(filename, "r")
-    file.readlines.each do |line|
-    name, cohort = line.chomp.split(',') # Parallel assignment
-      @students << {name: name, cohort: cohort.to_sym}
+    File.open(filename, "r") do |file|
+      file.readlines.each do |line|
+        name, cohort = line.chomp.split(',') # Parallel assignment
+        @students << {name: name, cohort: cohort.to_sym}
+      end
     end
-    file.close
   else
     puts "Please enter the names of the students"
     puts "To finish, just hit return twice"
@@ -96,14 +96,14 @@ end
 
 def save_students(filename)
   # open the file for writing
-  file = File.open(filename, "w")
+  File.open(filename, "w") do |file|
   # iterate over the array of save_students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
   end
-  file.close
 end
 
 
