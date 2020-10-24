@@ -1,24 +1,33 @@
+require 'csv'
 
 @students = []
 
-def getting_students(filename = "students.csv") # Here we pass 'students.csv' as a default value
+def read_students_from(filename = "students.csv")
   if File.exist?(filename)
-    File.open(filename, "r") do |file|
-      file.readlines.each do |line|
-        name, cohort = line.chomp.split(',') # Parallel assignment
+    @students = []
+    CSV.foreach(filename, "r") do |line|
+        name, cohort = line[0], line[1]
         @students << {name: name, cohort: cohort.to_sym}
-      end
     end
-  else
-    puts "Please enter the names of the students"
-    puts "To finish, just hit return twice"
+  end
+end
+
+def students_from_stdin
+  puts "Please enter the names of the students"
+  puts "To finish, just hit return twice"
+  name = STDIN.gets.chomp
+  while !name.empty? do
+    @students << {name: name, cohort: :november}
+    puts "Now we have #{@students.count} students"
     name = STDIN.gets.chomp
-    while !name.empty? do
-      #add the student hash to the array
-      @students << {name: name, cohort: :november}
-      puts "Now we have #{@students.count} students"
-      # get another name from the user
-      name = STDIN.gets.chomp
+  end
+end
+
+def save_students(filename)
+  CSV.open(filename, "w") do |file|
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      file << student_data
     end
   end
 end
@@ -27,7 +36,7 @@ def print_header
   puts "The students of Villians Academy"
   puts "-------------"
 end
-# Now let's print them
+
 def print_students_list
   @students.each do |student|
     puts "#{student[:name]} (#{student[:cohort]} cohort)"
@@ -35,7 +44,6 @@ def print_students_list
 end
 
 def print_footer
-  # Printing the total number of students
   puts "Overall, we have #{@students.count} great students"
 end
 
@@ -53,38 +61,33 @@ def show_students
   print_footer
 end
 
-
 def process(selection)
-    case selection
-    when "1"
-      getting_students
-    when "2"
-      if @students.length != 0
-        show_students
-      else
-        puts "There are currently no students."
-      end
-    when "3"
-      puts "In which file would you like to save the list of students?"
-      filename = gets.chomp
-      if File.exist?(filename)
-        save_students(filename)
-      else
-        puts "Sorry, that file doesn't exist."
-      end
-    when "4"
-      puts "From which file would you like to load the list of students?"
-      filename = gets.chomp
-      if File.exist?(filename)
-        getting_students(filename)
-      else
-        puts "Sorry, that file doesn't exist."
-      end
-    when "9"
-      exit #this will cause the program to terminate
+  case selection
+  when "1"
+    students_from_stdin
+  when "2"
+    if @students.length != 0
+      show_students
     else
-      puts "I don't know what you meant,try again"
+      puts "There are currently no students."
     end
+  when "3"
+    puts "In which file would you like to save the list of students? Please, specify the path."
+    filename = gets.chomp
+    save_students(filename)
+  when "4"
+    puts "From which file would you like to load the list of students? Please, specify the path."
+    filename = gets.chomp
+    if File.exist?(filename)
+      read_students_from(filename)
+    else
+      puts "Sorry, that file doesn't exist."
+    end
+  when "9"
+    exit
+  else
+    puts "I don't know what you meant,try again"
+  end
 end
 
 def interactive_menu
@@ -94,29 +97,5 @@ def interactive_menu
   end
 end
 
-def save_students(filename)
-  # open the file for writing
-  File.open(filename, "w") do |file|
-  # iterate over the array of save_students
-    @students.each do |student|
-      student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
-    end
-  end
-end
-
-
-def try_load_students
-  filename = ARGV.first # First argument from the command line
-  return if filename.nil? # If no file is given, it gets out of the method
-  if File.exists?(filename) # if it exists
-    load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
-  else # if it doesn't exist
-    puts "Sorry, #{filename} doesn't exist."
-    exit # quit the program
-  end
-end
-
+read_students_from
 interactive_menu
